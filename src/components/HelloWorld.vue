@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
+    <h2>{{ pippo }}{{ pluto }}{{ is43 }}</h2>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
       check out the
@@ -31,10 +32,26 @@
 </template>
 
 <script>
+import * as people from '../store/modules/people';
 export default {
   name: 'HelloWorld',
   props: {
-    msg: String
+    msg: String,
+    amount: {type: Number, default: 1}
+  },
+  data() {
+    return {
+      pippo: 43,
+      pluto: false
+    }
+  },
+  computed: {
+    is43() {
+      return this.pippo * this.$props.amount;
+    }
+  },
+  created() {
+    this.$store.dispatch(people.GETALL);
   }
 }
 </script>
