@@ -8,9 +8,6 @@ export default {
   [types.ADDONESUCCESS](state) {
     state.loading = false;
   },
-  [types.ADDONEFAILURE](state) {
-    state.loading = false;
-  },
   [types.DELETEONE](state) {
     state.loading = true;
   },
@@ -21,18 +18,13 @@ export default {
       person => person._id !== _id
     );
   },
-  [types.DELETEONEFAILURE](state) {
-    state.loading = false;
-  },
   [types.GETALL](state) {
     state.loading = true;
+    console.log('SONO IN GETALL...');
   },
   [types.GETALLSUCCESS](state, people) {
     state.loading = false;
-    state.people = people;
-  },
-  [types.GETALLFAILURE](state) {
-    state.loading = false;
+    state.people = people.data;
   },
   [types.GETONE](state) {
     state.loading = true;
@@ -41,8 +33,10 @@ export default {
     state.loading = false;
     state.current = person;
   },
-  [types.GETONEFAILURE](state) {
+  // TODO LOGGARE ERRORE E TIPOLOGIA SU SERVER
+  [types.HTTPFAILURE](state, typology) {
     state.loading = false;
+    console.log('ERROR DOING', typology)
   },
   [types.PUT](state) {
     state.loading = true;
@@ -50,9 +44,6 @@ export default {
   [types.PUTSUCCESS](state, person) {
     state.loading = false;
     state.current = person;
-  },
-  [types.PUTFAILURE](state) {
-    state.loading = false;
   },
   [types.SETCURRENT](state, person) {
     state.current = person;

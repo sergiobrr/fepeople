@@ -1,16 +1,12 @@
 export const ADDONE = 'people/ADDONE';
 export const ADDONESUCCESS = 'people/ADDONESUCCESS';
-export const ADDONEFAILURE = 'people/ADDONEFAILURE';
 export const DELETEONE = 'people/DELETEONE';
 export const DELETEONESUCCESS = 'people/DELETEONESUCCESS';
-export const DELETEONEFAILURE = 'people/DELETEONEFAILURE';
+export const HTTPFAILURE = 'people/HTTPFAILURE';
 export const GETALL = 'people/GETALL';
 export const GETALLSUCCESS = 'people/GETALLSUCCESS';
-export const GETALLFAILURE = 'people/GETALLFAILURE';
 export const GETONE = 'people/GETONE';
 export const GETONESUCCESS = 'people/GETONESUCCESS';
-export const GETONEFAILURE = 'people/GETONEFAILURE';
 export const PUT = 'people/PUT';
 export const PUTSUCCESS = 'people/PUTSUCCESS';
-export const PUTFAILURE = 'people/PUTFAILURE';
 export const SETCURRENT = 'people/SETCURRENT';

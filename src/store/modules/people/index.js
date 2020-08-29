@@ -2,7 +2,7 @@ import actions from './actions';
 import getters from './getters';
 import mutations from './mutations';
 
-export const people = {
+export const peopleState = {
   state: {
     people: {},
     current: {},
