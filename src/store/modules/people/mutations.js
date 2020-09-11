@@ -5,22 +5,20 @@ export default {
   [types.ADDONE](state) {
     state.loading = true;
   },
-  [types.ADDONESUCCESS](state) {
+  [types.ADDONESUCCESS](state, new_person) {
     state.loading = false;
+    delete new_person.update._status;
+    state.current = Object.assign(new_person.person, new_person.update)
   },
   [types.DELETEONE](state) {
     state.loading = true;
   },
   // TODO: SBAGLIATO DEVE RICARICARE LA PAGINA CORRENTE
-  [types.DELETEONESUCCESS](state, _id) {
+  [types.DELETEONESUCCESS](state) {
     state.loading = false;
-    state.people = state.people.filter(
-      person => person._id !== _id
-    );
   },
   [types.GETALL](state) {
     state.loading = true;
-    console.log('SONO IN GETALL...');
   },
   [types.GETALLSUCCESS](state, people) {
     state.loading = false;
@@ -41,9 +39,14 @@ export default {
   [types.PUT](state) {
     state.loading = true;
   },
-  [types.PUTSUCCESS](state, person) {
+  [types.PUTSUCCESS](state, new_data) {
     state.loading = false;
-    state.current = person;
+    delete new_data.response._status
+    state.current = Object.assign(
+      state.current,
+      new_data.update,
+      new_data.response
+    )
   },
   [types.SETCURRENT](state, person) {
     state.current = person;

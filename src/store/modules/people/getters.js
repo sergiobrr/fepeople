@@ -1,5 +1,4 @@
-const url = process.env.VUE_APP_ROOT_API + '/'
-  + process.env.VUE_APP_PEOPLE_URL + '/';
+const url = process.env.VUE_APP_ROOT_API + '/';
 
 export default {
   people(state) {
@@ -25,5 +24,8 @@ export default {
     return state.people._links.last ?
       url + state.people._links.last.href :
       null;
+  },
+  loading(state) {
+    return state.loading;
   }
 }

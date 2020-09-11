@@ -1,38 +1,45 @@
 import * as types from './mutation-types';
 import axios from 'axios';
+import helpers from '../../../helpers/resource';
 
-const url = process.env.VUE_APP_ROOT_API + '/' + process.env.VUE_APP_PEOPLE_URL
+const rootApi = process.env.VUE_APP_ROOT_API + '/';
+const url = rootApi + process.env.VUE_APP_PEOPLE_URL;
 
 export default {
-  [types.ADDONE] ({commit}, people) {
+  [types.ADDONE] ({commit}, person) {
     commit(types.ADDONE);
-    axios.post(url, people)
+    axios.post(url, person)
       .then(res => {
-        console.log('response', res);
-        commit(types.ADDONESUCCESS);
-        commit(types.GETONE, res._id);
+        commit(types.ADDONESUCCESS, {person: person, update: res.data});
       })
       .catch(error => {
         console.log(types.ADDONE, error);
         commit(types.HTTPFAILURE, types.ADDONE)
       });
   },
-  [types.DELETEONE] ({commit}, _id) {
+  [types.DELETEONE] ({commit, getters, dispatch}, selfLink) {
     commit(types.DELETEONE);
-    const href = url + '/' + _id;
-    axios.delete(href)
-      .then(res => {
-        console.log(types.DELETEONESUCCESS, res);
-        commit(types.DELETEONESUCCESS, _id)
+    const href = rootApi + selfLink.href;
+    axios.delete(
+      href,
+      {headers: {'If-Match': selfLink._etag}}
+      )
+      .then(() => {
+        commit(types.DELETEONESUCCESS)
+        dispatch(types.GETALL, getters.page)
       })
       .catch(error => {
         console.log(types.DELETEONE, error);
         commit(types.HTTPFAILURE, types.DELETEONE)
       });
   },
-  [types.GETALL] ({commit}) {
+  [types.GETALL] ({commit}, selfLink) {
     commit(types.GETALL);
-    axios.get(url)
+    let href = url;
+    if(selfLink !== undefined){
+      href = selfLink
+    }
+    axios.get(href)
       .then(res => {
         commit(types.GETALLSUCCESS, res);
       })
@@ -41,13 +48,12 @@ export default {
         commit(types.HTTPFAILURE, types.GETALL);
       });
   },
-  [types.GETONE]({commit}, _id) {
+  [types.GETONE]({commit}, selfLink) {
     commit(types.GETONE);
-    const href = url + '/' + _id;
+    const href = rootApi + selfLink;
     axios.get(href)
       .then(res => {
-        console.log(types.GETONESUCCESS, res);
-        commit(types.GETONESUCCESS, res);
+        commit(types.GETONESUCCESS, res.data);
       })
       .catch(error => {
         console.log(types.GETONE, error);
@@ -57,10 +63,17 @@ export default {
   [types.PUT] ({commit}, person) {
     commit(types.PUT);
     const href = url + '/' + person._id;
-    axios.put(href, person)
+    const etag = person._etag;
+    person = helpers.normalizeFields(person);
+    axios.put(
+      href,
+      person,
+      {headers: {
+        'If-Match': etag
+      }
+    })
       .then(res => {
-        console.log(types.PUTSUCCESS, res);
-        commit(types.PUTSUCCESS, res);
+        commit(types.PUTSUCCESS, {update: person, response: res.data});
       })
       .catch(error => {
         console.log(types.PUT, error);
